@@ -1,5 +1,3 @@
-@import "../../css/colors.css";
-
 .container {
     display: flex;
     width: 100%;
@@ -7,17 +5,20 @@
     align-items: center;
     justify-content: center;
 }
+
 .spinner {
     width: 64px;
     height: 64px;
     border-radius: 50%;
     border: 6px solid;
-    border-color: $motion-primary transparent $motion-primary transparent;
+    border-color: hsla(55, 90%, 60%, 1) transparent hsla(55, 90%, 60%, 1) transparent;
     animation: spinner 1.2s linear infinite;
 }
+
 [theme="dark"] .spinner {
-    border-color: #fff transparent #fff transparent;
+    border-color: hsla(55, 90%, 60%, 1) transparent hsla(55, 90%, 60%, 1) transparent;
 }
+
 @keyframes spinner {
     0% {
         transform: rotate(0deg);
