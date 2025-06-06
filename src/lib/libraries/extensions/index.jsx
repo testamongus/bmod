@@ -173,6 +173,15 @@ const menuItems = [
     },
 
 
+    {
+        name: 'Meme Extesnion',
+        extensionId: 'https://banana-mod.github.io/MemeExtension/MemeExtension.js',
+        iconURL: 'https://banana-mod.github.io/MemeExtension/memeextension.svg',
+        collaborator: 'Banana-mod',
+        tags: ['banana-mod'],
+        description: 'Get fresh baked memes.',
+        featured: true
+    },
 
     {
         name: '3D',
