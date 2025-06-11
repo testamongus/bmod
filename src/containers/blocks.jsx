@@ -99,6 +99,15 @@ class Blocks extends React.Component {
         this.onTargetsUpdate = debounce(this.onTargetsUpdate, 100);
         this.toolboxUpdateQueue = [];
     }
+    updateToolbox() {
+          let toolboxXML = this.props.toolboxXML;
+          if (typeof toolboxXML === 'string') {
+                const parser = new DOMParser();
+                toolboxXML = parser.parseFromString(toolboxXML, 'text/xml');
+          }
+                this.workspace.updateToolbox(toolboxXML);
+    }
+
     componentDidMount () {
         this.props.vm.setCompilerOptions({
             warpTimer: true
@@ -255,7 +264,7 @@ class Blocks extends React.Component {
 
         const categoryId = this.workspace.toolbox_.getSelectedCategoryId();
         const offset = this.workspace.toolbox_.getCategoryScrollOffset();
-        this.workspace.updateToolbox(this.props.toolboxXML);
+        this.updateToolbox();
         this._renderedToolboxXML = this.props.toolboxXML;
 
         // In order to catch any changes that mutate the toolbox during "normal runtime"
