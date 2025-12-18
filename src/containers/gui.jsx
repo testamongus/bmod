@@ -35,6 +35,7 @@ class GUI extends React.Component {
             showModal: true
         };
 
+        // Listen for login data from external source
         window.addEventListener('message', (event) => {
             if (event.origin !== 'https://www.snail-ide.com') return;
             this.setState({ loginData: event.data });
@@ -65,18 +66,6 @@ class GUI extends React.Component {
         }
 
         const {
-            assetHost,
-            cloudHost,
-            error,
-            isError,
-            isScratchDesktop,
-            isShowingProject,
-            onProjectLoaded,
-            onStorageInit,
-            onUpdateProjectId,
-            onVmInit,
-            projectHost,
-            projectId,
             children,
             fetchingProject,
             isLoading,
@@ -96,28 +85,31 @@ class GUI extends React.Component {
                     {children}
                 </GUIComponent>
 
+                {/* Full-screen Welcome Modal */}
                 {this.state.showModal && (
                     <Modal
-                        contentLabel="MerrCode"
+                        contentLabel="MerrCode Welcome"
                         onRequestClose={() => this.setState({ showModal: false })}
                         styleContent={{
-                            width: '100vw',
-                            height: '100vh',
-                            position: 'fixed',
+                            width: "100vw",
+                            height: "100vh",
+                            position: "fixed",
                             top: 0,
                             left: 0,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'rgba(0,0,0,0.5)'
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "rgba(0,0,0,0.8)",
+                            zIndex: 9999
                         }}
                     >
                         <div style={{
-                            padding: '20px',
-                            width: '80%',
-                            maxWidth: '800px',
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            borderRadius: '10px'
+                            padding: "30px",
+                            width: "80%",
+                            maxWidth: "800px",
+                            backgroundColor: "#fff",
+                            borderRadius: "10px",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
                         }}>
                             <h1>Welcome to MerrCode!</h1>
                             <p>HAPPY CHRISTMAS</p>
@@ -138,28 +130,21 @@ class GUI extends React.Component {
 }
 
 GUI.propTypes = {
-    assetHost: PropTypes.string,
     children: PropTypes.node,
-    cloudHost: PropTypes.string,
     error: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     fetchingProject: PropTypes.bool,
     intl: intlShape,
     isError: PropTypes.bool,
-    isEmbedded: PropTypes.bool,
-    isFullScreen: PropTypes.bool,
-    isLoading: PropTypes.bool,
     isScratchDesktop: PropTypes.bool,
     isShowingProject: PropTypes.bool,
+    isLoading: PropTypes.bool,
     isPlayground: PropTypes.bool,
     loadingStateVisible: PropTypes.bool,
     onProjectLoaded: PropTypes.func,
-    onSeeCommunity: PropTypes.func,
     onStorageInit: PropTypes.func,
     onUpdateProjectId: PropTypes.func,
     onVmInit: PropTypes.func,
-    projectHost: PropTypes.string,
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
     username: PropTypes.string
 };
@@ -177,51 +162,26 @@ const mapStateToProps = state => {
     const loadingState = state.scratchGui.projectState.loadingState;
     return {
         activeTabIndex: state.scratchGui.editorTab.activeTabIndex,
-        alertsVisible: state.scratchGui.alerts.visible,
-        backdropLibraryVisible: state.scratchGui.modals.backdropLibrary,
-        blocksTabVisible: state.scratchGui.editorTab.activeTabIndex === BLOCKS_TAB_INDEX,
-        cardsVisible: state.scratchGui.cards.visible,
-        connectionModalVisible: state.scratchGui.modals.connectionModal,
-        costumeLibraryVisible: state.scratchGui.modals.costumeLibrary,
-        costumesTabVisible: state.scratchGui.editorTab.activeTabIndex === COSTUMES_TAB_INDEX,
         error: state.scratchGui.projectState.error,
         isError: getIsError(loadingState),
-        isEmbedded: state.scratchGui.mode.isEmbedded,
-        isFullScreen: state.scratchGui.mode.isFullScreen || state.scratchGui.mode.isEmbedded,
-        isPlayerOnly: state.scratchGui.mode.isPlayerOnly,
-        isRtl: state.locales.isRtl,
+        isScratchDesktop: state.scratchGui.mode.isScratchDesktop,
         isShowingProject: getIsShowingProject(loadingState),
-        loadingStateVisible: state.scratchGui.modals.loadingProject,
         projectId: state.scratchGui.projectState.projectId,
-        soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
-        targetIsStage: (
-            state.scratchGui.targets.stage &&
-            state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget
-        ),
-        telemetryModalVisible: state.scratchGui.modals.telemetryModal,
-        tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
-        usernameModalVisible: state.scratchGui.modals.usernameModal,
-        settingsModalVisible: state.scratchGui.modals.settingsModal,
-        extensionsManagerModalVisible: state.scratchGui.modals.extensionManagerModal,
-        customExtensionModalVisible: state.scratchGui.modals.customExtensionModal,
         vm: state.scratchGui.vm
     };
 };
 
 const mapDispatchToProps = dispatch => ({
+    onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
+    onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
+    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal()),
     onExtensionButtonClick: () => dispatch(openExtensionLibrary()),
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
-    onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
-    onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
-    onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onRequestCloseTelemetryModal: () => dispatch(closeTelemetryModal())
+    onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX))
 });
 
-const ConnectedGUI = injectIntl(connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(GUI));
+const ConnectedGUI = injectIntl(connect(mapStateToProps, mapDispatchToProps)(GUI));
 
 const WrappedGui = compose(
     LocalizationHOC,
