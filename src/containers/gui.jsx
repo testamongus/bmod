@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import ReactModal from 'react-modal';
 import Modal from '../components/modal/modal.jsx';
 import VM from 'scratch-vm';
-import {injectIntl, intlShape} from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import {getIsError, getIsShowingProject} from '../reducers/project-state';
-import {activateTab, BLOCKS_TAB_INDEX, COSTUMES_TAB_INDEX, SOUNDS_TAB_INDEX} from '../reducers/editor-tab';
-import {closeCostumeLibrary, closeBackdropLibrary, closeTelemetryModal, openExtensionLibrary} from '../reducers/modals';
+import { getIsError, getIsShowingProject } from '../reducers/project-state';
+import { activateTab, BLOCKS_TAB_INDEX, COSTUMES_TAB_INDEX, SOUNDS_TAB_INDEX } from '../reducers/editor-tab';
+import { closeCostumeLibrary, closeBackdropLibrary, closeTelemetryModal, openExtensionLibrary } from '../reducers/modals';
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
@@ -25,7 +25,7 @@ import cloudManagerHOC from '../lib/cloud-manager-hoc.jsx';
 import TWFullScreenResizerHOC from '../lib/tw-fullscreen-resizer-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
-import {setIsScratchDesktop} from '../lib/isScratchDesktop.js';
+import { setIsScratchDesktop } from '../lib/isScratchDesktop.js';
 
 class GUI extends React.Component {
     constructor(props) {
@@ -47,6 +47,9 @@ class GUI extends React.Component {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
+
+        // Set ReactModal app element to avoid accessibility warnings
+        ReactModal.setAppElement('body');
     }
 
     componentDidUpdate(prevProps) {
@@ -61,7 +64,7 @@ class GUI extends React.Component {
     render() {
         if (this.props.isError) {
             throw new Error(
-                `Error in GUI [location=${window.location}]: ${this.props.error.stack ? this.props.error.stack : this.props.error}`
+                `Error in GUI [location=${window.location}]: ${this.props.error?.stack || this.props.error}`
             );
         }
 
@@ -88,7 +91,7 @@ class GUI extends React.Component {
                 {/* Full-screen Welcome Modal */}
                 {this.state.showModal && (
                     <Modal
-                        contentLabel="MerrCode Welcome"
+                        contentLabel="Banana-mod"
                         onRequestClose={() => this.setState({ showModal: false })}
                         style={{
                             overlay: {
@@ -97,7 +100,7 @@ class GUI extends React.Component {
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
-                                backgroundColor: "rgba(0,0,0,0.9)", // fully opaque dark background
+                                backgroundColor: "rgba(255, 255, 255, 0.9)", // lighter, almost white overlay
                                 zIndex: 9999,
                                 display: "flex",
                                 justifyContent: "center",
@@ -116,17 +119,18 @@ class GUI extends React.Component {
                         }}
                     >
                         <div>
-                            <h1>Welcome to MerrCode!</h1>
+                            <h1>Welcome to Banana-mod!</h1>
                             <p>HAPPY CHRISTMAS</p>
                             <hr style={{ borderColor: "yellow", borderWidth: "2px", width: "100%", margin: "20px 0" }} />
-                            <p>This is a mod of PenguinMod that is a mod of Turbowarp which is a mod of Scratch.</p>
-                            <p>MerrCode adds features such as:</p>
+                            <p>This is a mod of Snail-IDE that is a mod of PenguinMod that is a mod of Turbowarp which is a mod of Scratch.</p>
+                            <p>Banana-mod adds stuff like :</p>
                             <ul>
-                                <li>Extra UI</li>
+                                <li>Extra Extensions</li>
                                 <li>Extra Features</li>
-                                <li>And More!</li>
+                                <li>And Mutch More!</li>
+                                <li>AND BANANAS!!!</li>
                             </ul>
-                            <i>Enjoy coding! :3</i>
+                            <i>Enjoy programming! 🍌</i>
                         </div>
                     </Modal>
                 )}
@@ -202,7 +206,5 @@ const WrappedGui = compose(
     cloudManagerHOC,
     TWFullScreenResizerHOC
 )(ConnectedGUI);
-
-WrappedGui.setAppElement = ReactModal.setAppElement;
 
 export default WrappedGui;
