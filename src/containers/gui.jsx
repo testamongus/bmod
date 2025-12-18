@@ -92,7 +92,12 @@ class GUI extends React.Component {
                         onRequestClose={() => this.setState({ showModal: false })}
                         style={{
                             overlay: {
-                                backgroundColor: "rgba(0,0,0,0.8)",
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: "rgba(0,0,0,0.9)", // fully opaque dark background
                                 zIndex: 9999,
                                 display: "flex",
                                 justifyContent: "center",
@@ -100,7 +105,7 @@ class GUI extends React.Component {
                             },
                             content: {
                                 position: "relative",
-                                inset: "unset",
+                                inset: "unset", // remove default positioning
                                 padding: "30px",
                                 width: "80%",
                                 maxWidth: "800px",
