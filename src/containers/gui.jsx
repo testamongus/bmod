@@ -3,27 +3,14 @@ import React from 'react';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
+import Modal from '../components/modal/modal.jsx';
 import VM from 'scratch-vm';
 import {injectIntl, intlShape} from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import {
-    getIsError,
-    getIsShowingProject
-} from '../reducers/project-state';
-import {
-    activateTab,
-    BLOCKS_TAB_INDEX,
-    COSTUMES_TAB_INDEX,
-    SOUNDS_TAB_INDEX
-} from '../reducers/editor-tab';
-
-import {
-    closeCostumeLibrary,
-    closeBackdropLibrary,
-    closeTelemetryModal,
-    openExtensionLibrary,
-} from '../reducers/modals';
+import {getIsError, getIsShowingProject} from '../reducers/project-state';
+import {activateTab, BLOCKS_TAB_INDEX, COSTUMES_TAB_INDEX, SOUNDS_TAB_INDEX} from '../reducers/editor-tab';
+import {closeCostumeLibrary, closeBackdropLibrary, closeTelemetryModal, openExtensionLibrary} from '../reducers/modals';
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
@@ -31,7 +18,6 @@ import SBFileUploaderHOC from '../lib/sb-file-uploader-hoc.jsx';
 import ProjectFetcherHOC from '../lib/project-fetcher-hoc.jsx';
 import TitledHOC from '../lib/titled-hoc.jsx';
 import ProjectSaverHOC from '../lib/project-saver-hoc.jsx';
-import QueryParserHOC from '../lib/query-parser-hoc.jsx';
 import storage from '../lib/storage';
 import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
@@ -45,37 +31,40 @@ class GUI extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loginData: {}
-        }
+            loginData: {},
+            showModal: true
+        };
+
         window.addEventListener('message', (event) => {
             if (event.origin !== 'https://www.snail-ide.com') return;
-               this.setState({ loginData: event.data });
-               console.log(event.data);
-            }
-        );
+            this.setState({ loginData: event.data });
+            console.log(event.data);
+        });
     }
-    componentDidMount () {
+
+    componentDidMount() {
         setIsScratchDesktop(this.props.isScratchDesktop);
         this.props.onStorageInit(storage);
         this.props.onVmInit(this.props.vm);
     }
-    componentDidUpdate (prevProps) {
+
+    componentDidUpdate(prevProps) {
         if (this.props.projectId !== prevProps.projectId && this.props.projectId !== null) {
             this.props.onUpdateProjectId(this.props.projectId);
         }
         if (this.props.isShowingProject && !prevProps.isShowingProject) {
-            // this only notifies container when a project changes from not yet loaded to loaded
-            // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
         }
     }
-    render () {
+
+    render() {
         if (this.props.isError) {
             throw new Error(
-                `Error in GUI [location=${window.location}]: ${this.props.error.stack ? this.props.error.stack : this.props.error}`);
+                `Error in GUI [location=${window.location}]: ${this.props.error.stack ? this.props.error.stack : this.props.error}`
+            );
         }
+
         const {
-            /* eslint-disable no-unused-vars */
             assetHost,
             cloudHost,
             error,
@@ -88,7 +77,6 @@ class GUI extends React.Component {
             onVmInit,
             projectHost,
             projectId,
-            /* eslint-enable no-unused-vars */
             children,
             fetchingProject,
             isLoading,
@@ -96,15 +84,55 @@ class GUI extends React.Component {
             isPlayground,
             ...componentProps
         } = this.props;
+
         return (
-            <GUIComponent
-                loading={fetchingProject || isLoading || loadingStateVisible}
-                isPlayground={isPlayground}
-                username={this.state.loginData.packet?.username}
-                {...componentProps}
-            >
-                {children}
-            </GUIComponent>
+            <>
+                <GUIComponent
+                    loading={fetchingProject || isLoading || loadingStateVisible}
+                    isPlayground={isPlayground}
+                    username={this.state.loginData.packet?.username}
+                    {...componentProps}
+                >
+                    {children}
+                </GUIComponent>
+
+                {this.state.showModal && (
+                    <Modal
+                        contentLabel="MerrCode"
+                        onRequestClose={() => this.setState({ showModal: false })}
+                        styleContent={{
+                            width: '100vw',
+                            height: '100vh',
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.5)'
+                        }}
+                    >
+                        <div style={{
+                            padding: '20px',
+                            width: '80%',
+                            maxWidth: '800px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            borderRadius: '10px'
+                        }}>
+                            <h1>Welcome to MerrCode!</h1>
+                            <p>HAPPY CHRISTMAS</p>
+                            <p>This is a mod of PenguinMod that is a mod of Turbowarp which is a mod of Scratch.</p>
+                            <p>MerrCode adds features such as:</p>
+                            <ul>
+                                <li>Extra UI</li>
+                                <li>Extra Features</li>
+                                <li>And More!</li>
+                            </ul>
+                            <i>Enjoy coding! :3</i>
+                        </div>
+                    </Modal>
+                )}
+            </>
         );
     }
 }
@@ -142,7 +170,7 @@ GUI.defaultProps = {
     onStorageInit: storageInstance => storageInstance.addOfficialScratchWebStores(),
     onProjectLoaded: () => {},
     onUpdateProjectId: () => {},
-    onVmInit: (/* vm */) => {}
+    onVmInit: () => {}
 };
 
 const mapStateToProps = state => {
@@ -195,14 +223,10 @@ const ConnectedGUI = injectIntl(connect(
     mapDispatchToProps,
 )(GUI));
 
-// note that redux's 'compose' function is just being used as a general utility to make
-// the hierarchy of HOC constructor calls clearer here; it has nothing to do with redux's
-// ability to compose reducers.
 const WrappedGui = compose(
     LocalizationHOC,
     ErrorBoundaryHOC('Top Level App'),
     FontLoaderHOC,
-    // QueryParserHOC, // tw: HOC is unused
     ProjectFetcherHOC,
     TitledHOC,
     ProjectSaverHOC,
@@ -214,4 +238,5 @@ const WrappedGui = compose(
 )(ConnectedGUI);
 
 WrappedGui.setAppElement = ReactModal.setAppElement;
+
 export default WrappedGui;
