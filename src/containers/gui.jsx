@@ -100,7 +100,7 @@ class GUI extends React.Component {
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
-                                backgroundColor: "rgba(255, 255, 255, 0.9)", // lighter, almost white overlay
+                                backgroundColor: "rgba(0, 0, 0, 0.5)", // subtle dark overlay
                                 zIndex: 9999,
                                 display: "flex",
                                 justifyContent: "center",
@@ -108,26 +108,29 @@ class GUI extends React.Component {
                             },
                             content: {
                                 position: "relative",
-                                inset: "unset", // remove default positioning
-                                padding: "30px",
-                                width: "80%",
-                                maxWidth: "800px",
-                                backgroundColor: "#fff",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
+                                inset: "unset",
+                                padding: "40px",
+                                width: "90%",
+                                maxWidth: "700px",
+                                backgroundColor: "#ffffff", // fully white background
+                                borderRadius: "12px",
+                                boxShadow: "0 8px 30px rgba(0,0,0,0.3)",
+                                textAlign: "center",
+                                overflow: "auto",
+                                maxHeight: "90vh"
                             }
                         }}
                     >
                         <div>
-                            <h1>Welcome to Banana-mod!</h1>
-                            <p>HAPPY CHRISTMAS</p>
+                            <h1 style={{ marginBottom: '10px' }}>Welcome to Banana-mod!</h1>
+                            <p style={{ fontWeight: 'bold', marginBottom: '20px' }}>HAPPY CHRISTMAS</p>
                             <hr style={{ borderColor: "yellow", borderWidth: "2px", width: "100%", margin: "20px 0" }} />
                             <p>This is a mod of Snail-IDE that is a mod of PenguinMod that is a mod of Turbowarp which is a mod of Scratch.</p>
-                            <p>Banana-mod adds stuff like :</p>
-                            <ul>
+                            <p>Banana-mod adds stuff like:</p>
+                            <ul style={{ textAlign: 'left', margin: '10px 0' }}>
                                 <li>Extra Extensions</li>
                                 <li>Extra Features</li>
-                                <li>And Mutch More!</li>
+                                <li>And Much More!</li>
                                 <li>AND BANANAS!!!</li>
                             </ul>
                             <i>Enjoy programming! 🍌</i>
