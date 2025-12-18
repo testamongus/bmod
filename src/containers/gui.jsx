@@ -90,29 +90,30 @@ class GUI extends React.Component {
                     <Modal
                         contentLabel="MerrCode Welcome"
                         onRequestClose={() => this.setState({ showModal: false })}
-                        styleContent={{
-                            width: "100vw",
-                            height: "100vh",
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "rgba(0,0,0,0.8)",
-                            zIndex: 9999
+                        style={{
+                            overlay: {
+                                backgroundColor: "rgba(0,0,0,0.8)",
+                                zIndex: 9999,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            },
+                            content: {
+                                position: "relative",
+                                inset: "unset",
+                                padding: "30px",
+                                width: "80%",
+                                maxWidth: "800px",
+                                backgroundColor: "#fff",
+                                borderRadius: "10px",
+                                boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
+                            }
                         }}
                     >
-                        <div style={{
-                            padding: "30px",
-                            width: "80%",
-                            maxWidth: "800px",
-                            backgroundColor: "#fff",
-                            borderRadius: "10px",
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.3)"
-                        }}>
+                        <div>
                             <h1>Welcome to MerrCode!</h1>
                             <p>HAPPY CHRISTMAS</p>
+                            <hr style={{ borderColor: "yellow", borderWidth: "2px", width: "100%", margin: "20px 0" }} />
                             <p>This is a mod of PenguinMod that is a mod of Turbowarp which is a mod of Scratch.</p>
                             <p>MerrCode adds features such as:</p>
                             <ul>
