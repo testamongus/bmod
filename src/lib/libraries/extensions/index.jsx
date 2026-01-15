@@ -184,6 +184,16 @@ const menuItems = [
     },
 
     {
+        name: 'PYDatabase',
+        extensionId: 'https://banana-mod.github.io/pydatabase/pydatabase.js',
+        iconURL: 'https://banana-mod.github.io/pydatabase/PYDatabase.svg',
+        collaborator: 'Banana-mod',
+        tags: ['banana-mod'],
+        description: 'Free file uploads',
+        featured: true
+    },
+
+    {
         name: '3D',
         extensionId: 'jg3d',
         iconURL: jg3dExtensionIcon,
